@@ -1,20 +1,40 @@
-import React from 'react';
-import { Container, Form ,Button} from 'react-bootstrap';
+import React, { useContext } from 'react';
+import { Container, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../provider/AuthProvider';
 
 const Register = () => {
+    const { createUser } = useContext(AuthContext)
+    const handleRegister = event=>{
+        event.preventDefault()
+        const form = event.target;
+        const name= form.name.value;
+        const photo = form.photo.value;
+        const email = form.email.value;
+        const password = form.password.value;
+        console.log(name,photo,email,password)
+        createUser(email,password)
+        .then(result =>{
+            const createdUser = result.user;
+            console.log(createdUser)
+        })
+        .catch(error=>{
+            console.error(error.message)
+        })
+
+    }
     return (
         <div>
             <Container>
-                <Form className='w-25 mx-auto py-4'>
+                <Form className='w-25 mx-auto py-4' onSubmit={ handleRegister }>
                     <h3>Please Register</h3>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Group className="mb-3" controlId="">
                         <Form.Label>Your Name</Form.Label>
                         <Form.Control type="text" placeholder="Your name" name='name' required />
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Group className="mb-3" controlId="">
                         <Form.Label>Photo URL</Form.Label>
-                        <Form.Control type="email" placeholder="Photo URL" name='text' required />
+                        <Form.Control type="text" placeholder="Photo URL" name='photo' required />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
