@@ -1,24 +1,28 @@
 import React, { useContext } from 'react';
-import { Container, Form,Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Container, Form, Button } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../provider/AuthProvider';
 
 const Login = () => {
-    const {loginUser} =useContext(AuthContext)
-    const handleLogin=event=>{
+    const { loginUser } = useContext(AuthContext)
+    const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || '/category/0'
+    const handleLogin = event => {
         event.preventDefault()
         const form = event.target
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email,password)
-        loginUser(email,password)
-        .then(result=>{
-            const loggedUser = result.user
-            console.log(loggedUser)
-        })
-        .catch(error=>{
-            console.error(error.message)
-        })
+        console.log(email, password)
+        loginUser(email, password)
+            .then(result => {
+                const loggedUser = result.user
+                console.log(loggedUser)
+                navigate(from,{replace: true})
+            })
+            .catch(error => {
+                console.error(error.message)
+            })
 
     }
     return (
@@ -41,13 +45,13 @@ const Login = () => {
                     Login
                 </Button> <br />
                 <Form.Text className="text-secondary">
-                   Don't Have An Account? <Link to='/register'>Register</Link>
+                    Don't Have An Account? <Link to='/register'>Register</Link>
                 </Form.Text>
                 <Form.Text className="text-danger">
-                   
+
                 </Form.Text>
                 <Form.Text className="text-success">
-                   
+
                 </Form.Text>
             </Form>
         </Container>
